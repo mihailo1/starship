@@ -1,0 +1,8 @@
+schema: https://spacex-production.up.railway.app/
+documents: ./components/**/*.tsx
+generates:
+  ./lib/__generated__/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node
