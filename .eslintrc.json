@@ -4,6 +4,6 @@
     "next/typescript"
   ],
   "ignorePatterns": [
-    "lib/__generated__/graphql.ts"
+    "lib/types/__generated__/graphql.ts"
   ]
 }
