@@ -37,7 +37,6 @@ describe('LaunchesListClient (real API)', () => {
         <LaunchesListClient
           launches={launches}
           page={1}
-          pageSize={10}
           total={launches.length}
           loading={false}
           onPageChange={() => {}}
@@ -53,7 +52,6 @@ describe('LaunchesListClient (real API)', () => {
         <LaunchesListClient
           launches={[]}
           page={1}
-          pageSize={10}
           total={0}
           loading={false}
           onPageChange={() => {}}

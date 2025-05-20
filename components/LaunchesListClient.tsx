@@ -6,11 +6,12 @@ import LaunchesListSkeleton from './skeletons/LaunchesListSkeleton';
 import Pagination from './Pagination';
 import { ListLaunch } from '../lib/types';
 import RocketPlaceholderIcon from '../public/rocket-placeholder.svg';
+import { PAGE_SIZE } from "../lib/constants";
+import ParticlesBackground from './particles/ParticlesBackground';
 
 interface LaunchesListClientProps {
   launches: ListLaunch[];
   page: number;
-  pageSize: number;
   total: number;
   loading?: boolean;
   onPageChange: (page: number) => void;
@@ -55,8 +56,8 @@ function LaunchListItem({ launch }: { launch: ListLaunch }) {
   );
 }
 
-export default function LaunchesListClient({ launches, page, pageSize, total, loading = false, onPageChange }: LaunchesListClientProps) {
-  const totalPages = Math.ceil(total / pageSize);
+export default function LaunchesListClient({ launches, page, total, loading = false, onPageChange }: LaunchesListClientProps) {
+  const totalPages = Math.ceil(total / PAGE_SIZE);
   return (
     <div>
       {loading ? (
@@ -76,6 +77,8 @@ export default function LaunchesListClient({ launches, page, pageSize, total, lo
       ) : (
         <Pagination page={page} totalPages={totalPages} onPageChange={onPageChange} loading={loading} />
       )}
+
+      <ParticlesBackground />
     </div>
   );
 }

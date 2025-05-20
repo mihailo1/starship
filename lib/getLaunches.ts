@@ -7,6 +7,8 @@ import { Launch } from './types/__generated__/graphql';
 const CACHE_TTL = 600_000;
 const launchesCache: { launches: ListLaunch[]; timestamp: number } = { launches: [], timestamp: 0 };
 
+const wikipediaImageCache: Record<string, string | undefined> = {};
+
 export async function fetchAllLaunches(): Promise<ListLaunch[]> {
   const client = getApolloClient();
   const { data }: ApolloQueryResult<{ launches: Launch[] }> = await client.query({
@@ -45,7 +47,12 @@ export async function getLaunches({ search = '', page = 1, pageSize = 12 }: { se
         const match = l.wikipedia.match(/\/wiki\/(.+)$/);
         const title = match ? match[1] : undefined;
         if (title) {
-          image_url = await getWikipediaImage(title);
+          if (wikipediaImageCache[title] !== undefined) {
+            image_url = wikipediaImageCache[title];
+          } else {
+            image_url = await getWikipediaImage(title);
+            wikipediaImageCache[title] = image_url;
+          }
         }
       }
       return { ...l, image_url };

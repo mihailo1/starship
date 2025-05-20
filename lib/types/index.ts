@@ -10,3 +10,13 @@ export type ListLaunch = {
   wikipedia?: string;
   image_url?: string;
 };
+
+export type LaunchesSearchCacheEntry = {
+  data: {
+    launches: ListLaunch[];
+    total: number;
+    page: number;
+    pageSize: number;
+  };
+  timestamp: number;
+};

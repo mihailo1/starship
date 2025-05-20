@@ -20,6 +20,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - ESLint
 - codegen (GraphQL type generation)
 - PostCSS
+- Tanstack Query
 
 ## Testing
 
@@ -50,6 +51,9 @@ npm run test
 
 - **Improved FCP & LCP**
 Even though lighthouse scores are good (4 hundreds), I would improve the FCP and LCP for better SEO and user experience. This can be achieved by optimizing images, lazy loading non-critical resources, and using a CDN for static assets.
+
+- **Avoid getWikipediaImage step**
+Populating launchesWithImages takes a lot of time. I would consider using CDN for images or a third-party service like Cloudinary to optimize image delivery.
 
 ## Questions
 

@@ -1,54 +1,60 @@
 'use client';
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import LaunchesListClient from './LaunchesListClient';
 import { useDebouncedValue } from './hooks/useDebouncedValue';
 import { ListLaunch } from '../lib/types';
+import { useQuery } from '@tanstack/react-query';
+import SearchInput from './SearchInput';
 
-function LaunchesListClientShell({ initialLaunches = [], initialTotal = 0 }: { initialLaunches?: ListLaunch[]; initialTotal?: number }) {
+function fetchLaunches({ search, page }: { search: string; page: number }) {
+  const params = new URLSearchParams({ search, page: String(page) });
+  return fetch(`/api/launches-search?${params.toString()}`).then(res => res.json());
+}
+
+const getInitialPage = (initialPage: number) => {
+  if (typeof window === 'undefined') return initialPage;
+  const params = new URLSearchParams(window.location.search);
+  const pageParam = params.get('page');
+  const pageNum = pageParam ? parseInt(pageParam, 10) : initialPage;
+  return isNaN(pageNum) || pageNum < 1 ? 1 : pageNum;
+};
+
+function LaunchesListClientShell({ initialLaunches = [], initialTotal = 0, initialPage = 1 }: { initialLaunches?: ListLaunch[]; initialTotal?: number; initialPage?: number }) {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebouncedValue(search, 400);
-  const [page, setPage] = useState(1);
-  const pageSize = 12;
-  const [loading, setLoading] = useState(false);
-  const [launches, setLaunches] = useState(initialLaunches);
-  const [total, setTotal] = useState(initialTotal);
-  const isFirstRender = useRef(true);
+  const [page, setPage] = useState(() => getInitialPage(initialPage));
 
-  const fetchLaunches = useCallback(async (searchValue: string) => {
-    setLoading(true);
-    const params = new URLSearchParams({ search: searchValue, page: String(page), pageSize: String(pageSize) });
-    const res = await fetch(`/api/launches-search?${params.toString()}`);
-    const data = await res.json();
-    setLaunches(data.launches);
-    setTotal(data.total);
-    setLoading(false);
-  }, [page, pageSize]);
+  const {
+    data,
+    isFetching,
+  } = useQuery({
+    queryKey: ['launches', debouncedSearch, page],
+    queryFn: () => fetchLaunches({ search: debouncedSearch, page }),
+    placeholderData: { launches: initialLaunches, total: initialTotal },
+  });
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    fetchLaunches(debouncedSearch);
-  }, [fetchLaunches, page, debouncedSearch]);
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', String(page));
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState({}, '', newUrl);
+  }, [page]);
 
   return (
-    <div className="p-4 max-w-3xl mx-auto">
-      <input
-        className="border p-2 w-full mb-4 rounded"
-        placeholder="Search by mission name..."
+    <div className="p-4 max-w-3xl mx-auto z-10 relative">
+      <SearchInput
         value={search}
-        onChange={e => {
-          setSearch(e.target.value);
+        onChange={value => {
+          setSearch(value);
           setPage(1);
         }}
       />
       <LaunchesListClient
-        launches={launches}
+        launches={data.launches}
         page={page}
-        pageSize={pageSize}
-        total={total}
-        loading={loading}
+        total={data.total}
+        loading={isFetching}
         onPageChange={setPage}
       />
     </div>

@@ -5,6 +5,7 @@ import ReadMore from './ReadMore';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useState } from 'react';
+import ParticlesBackground from './particles/ParticlesBackground';
 
 export function LaunchDetailsClient({ launch }: { launch: LaunchWithImage | null }) {
   const router = useRouter();
@@ -12,14 +13,12 @@ export function LaunchDetailsClient({ launch }: { launch: LaunchWithImage | null
 
   if (!launch) return <div className="p-6 text-center text-gray-500">Launch not found</div>;
 
-
   const imageUrl = launch.image_url || launch.links?.mission_patch || null;
 
   return (
     <div
-      className="launchDetailsMobileCard p-4 sm:p-6 max-w-full sm:max-w-3xl mx-auto my-6 sm:my-12 bg-white sm:bg-gradient-to-br sm:from-white sm:to-gray-50 rounded-2xl animate-fade-in transition-all duration-300"
+      className="launchDetailsMobileCard p-4 sm:p-6 max-w-full sm:max-w-3xl mx-auto my-6 sm:my-12 bg-white sm:bg-gradient-to-br sm:from-white sm:to-gray-50 rounded-2xl animate-fade-in transition-all duration-300 z-10 relative"
     >
-      {/* Header Section */}
       <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 border-b border-gray-100 pb-4 text-center sm:text-left">
         <div className="w-full sm:w-auto">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight break-words">{launch.mission_name}</h1>
@@ -43,7 +42,7 @@ export function LaunchDetailsClient({ launch }: { launch: LaunchWithImage | null
             height={96}
             priority
             quality={75}
-            className={`object-cover border-2 border-gray-100 shadow-sm bg-gray-100 mx-auto sm:mx-0 aspect-square transition-all duration-100 ${imgLoaded ? 'blur-0 scale-100' : 'blur-md scale-110'}`}
+            className={`object-cover border-2 border-gray-100 shadow-sm bg-gray-100 mx-auto sm:mx-0 aspect-square transition-all duration-100 rounded-full ${imgLoaded ? 'blur-0 scale-100' : 'blur-md scale-110'}`}
             onLoadingComplete={() => setImgLoaded(true)}
           />
         ) : (
@@ -54,7 +53,6 @@ export function LaunchDetailsClient({ launch }: { launch: LaunchWithImage | null
         </span>
       </div>
 
-      {/* Details Section */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 mb-8">
         <div>
           <h2 className="text-base sm:text-lg font-semibold text-gray-800">Mission Details</h2>
@@ -72,7 +70,6 @@ export function LaunchDetailsClient({ launch }: { launch: LaunchWithImage | null
         </div>
       </div>
 
-      {/* Links Section */}
       {(launch.links?.wikipedia || launch.links?.video_link) && (
         <div className="mb-8">
           <h2 className="text-base sm:text-lg font-semibold text-gray-800">Resources</h2>
@@ -101,12 +98,13 @@ export function LaunchDetailsClient({ launch }: { launch: LaunchWithImage | null
         </div>
       )}
 
-      {/* Back Button */}
       <div className="mt-6 flex justify-center sm:justify-end">
-        <Button dark onClick={() => router.push('/')}>
+        <Button dark onClick={() => router.back()}>
           Back to List
         </Button>
       </div>
+
+      <ParticlesBackground />
     </div>
   );
 }

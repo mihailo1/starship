@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import './globals.css';
+import ReactQueryProvider from "../components/ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "spacex-launches",
@@ -17,16 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,12 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link href="https://fonts.cdnfonts.com/css/d-din" rel="stylesheet" />
+
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased font-d-din bg-gray-50 min-h-screen`}
+        className={`antialiased bg-gray-50`}
       >
-        {children}
+        <ReactQueryProvider>
+          {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );
