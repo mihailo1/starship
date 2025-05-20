@@ -40,5 +40,5 @@ jobs:
           project: "space-y"
           entrypoint: "jsr:@deno/nextjs-start"
           root: "."
-          include: .next, public
+          
           
