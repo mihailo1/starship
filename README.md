@@ -21,6 +21,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - codegen (GraphQL type generation)
 - PostCSS
 - Tanstack Query
+- Particles canvas background (based on my previous work https://codepen.io/mikhail-nikiforov/pen/qEEPzNd, with some help of Grok AI)
 
 ## Testing
 
