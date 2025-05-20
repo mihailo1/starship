@@ -23,6 +23,7 @@ function LaunchesListClientShell({ initialLaunches = [], initialTotal = 0, initi
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebouncedValue(search, 400);
   const [page, setPage] = useState(() => getInitialPage(initialPage));
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const {
     data,
@@ -31,7 +32,14 @@ function LaunchesListClientShell({ initialLaunches = [], initialTotal = 0, initi
     queryKey: ['launches', debouncedSearch, page],
     queryFn: () => fetchLaunches({ search: debouncedSearch, page }),
     placeholderData: { launches: initialLaunches, total: initialTotal },
+    enabled: !isFirstLoad,
   });
+
+  useEffect(() => {
+    if (isFirstLoad && (search !== '' || page !== initialPage)) {
+      setIsFirstLoad(false);
+    }
+  }, [search, page, initialPage, isFirstLoad]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

@@ -55,6 +55,9 @@ Even though lighthouse scores are good (4 hundreds), I would improve the FCP and
 - **Avoid getWikipediaImage step**
 Populating launchesWithImages takes a lot of time. I would consider using CDN for images or a third-party service like Cloudinary to optimize image delivery.
 
+- **View Transition API**  
+Use the View Transition API to prevent layout flickers.
+
 ## Questions
 
 - **How would you design and implement authentication? Consider security, scalability and user experience.**
