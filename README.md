@@ -1,3 +1,6 @@
+## Live Demo
+https://spacex-launches-psi-one.vercel.app/
+
 ## Getting Started
 
 First, run the development server (you'll need to have [Node.js](https://nodejs.org/) 18+ installed):
